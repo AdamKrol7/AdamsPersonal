@@ -1,0 +1,29 @@
+---
+import { Image } from 'astro:assets';
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { getProjects } from '../../content-helpers';
+
+export async function getStaticPaths() {
+  const projects = await getProjects();
+  return projects.map((project) => ({ params: { slug: project.id }, props: { project } }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+const d = project.data;
+---
+<Base title={d.title} active="design">
+<main class="wrap">
+  <article class="article">
+    <div class="crumbs mono"><a href="/design/">&larr; Design</a><span>{d.label}</span></div>
+    <h1 class="disp">{d.title}</h1>
+    <div class="figure">
+      {d.cover
+        ? <Image src={d.cover} alt={d.title} widths={[720, 1440]} sizes="(max-width: 760px) 100vw, 720px" />
+        : <div class="ph">{d.placeholder ?? d.label}</div>}
+    </div>
+    <div class="body"><Content /></div>
+  </article>
+</main>
+</Base>

@@ -1,0 +1,79 @@
+---
+import '../styles/global.css';
+import { site } from '../site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  active?: 'notes' | 'design';
+}
+const { title, description = 'Adam Krol — Engineer', active } = Astro.props;
+const fullTitle = title ? `${title} — Adam Krol` : 'Adam Krol';
+---
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>{fullTitle}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,100..125,400..700;1,100..125,400..700&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="logo" href="/" aria-label="Adam Krol — home">AK</a>
+    <div class="nav-links">
+      <a href="/notes/" class={active === 'notes' ? 'active' : undefined}>Notes</a>
+      <a href="/design/" class={active === 'design' ? 'active' : undefined}>Design</a>
+      <button class="theme-toggle" type="button" aria-label="Toggle theme"></button>
+    </div>
+  </div>
+</nav>
+
+<slot />
+
+<footer class="footer">
+  <div class="wrap">
+    <a class="cta disp" href={`mailto:${site.email}`}>Get in touch</a>
+    <div class="row mono">
+      <span>&copy; {new Date().getFullYear()} Adam Krol</span>
+      <span style="display:flex;gap:22px;">
+        <a href={`mailto:${site.email}`}>Email</a>
+        {site.links.map((l) => <a href={l.href} target="_blank" rel="noopener">{l.label}</a>)}
+      </span>
+    </div>
+  </div>
+</footer>
+
+<script is:inline>
+(function () {
+  var theme = 'dark';
+  var root = document.documentElement;
+  var btn = document.querySelector('.theme-toggle');
+  var moon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>';
+  var sun = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>';
+  function icon() { btn.innerHTML = theme === 'dark' ? sun : moon; }
+  btn.addEventListener('click', function () {
+    theme = theme === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', theme);
+    icon();
+  });
+  icon();
+
+  function reveal() {
+    document.querySelectorAll('.rv:not(.in)').forEach(function (e) {
+      if (e.getBoundingClientRect().top < window.innerHeight * 0.95) e.classList.add('in');
+    });
+  }
+  window.addEventListener('scroll', reveal, { passive: true });
+  reveal();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+---
+import Base from '../../layouts/Base.astro';
+import Tile from '../../components/Tile.astro';
+import { site } from '../../site';
+import { getProjects } from '../../content-helpers';
+
+const projects = await getProjects();
+const count = projects.length + (site.soonTile ? 1 : 0);
+---
+<Base title="Design" active="design">
+<main class="wrap">
+
+  <header class="page-head">
+    <h1 class="disp">Design</h1>
+  </header>
+
+  <div class="rule mono"><span>{count}</span></div>
+
+  <section class="grid">
+    {projects.map((p) => (
+      <Tile title={p.data.title} label={p.data.label} href={`/design/${p.id}/`} cover={p.data.cover} placeholder={p.data.placeholder ?? p.data.label} />
+    ))}
+    {site.soonTile && <Tile title="Something new" label="Soon" placeholder="Next" />}
+  </section>
+
+</main>
+</Base>
