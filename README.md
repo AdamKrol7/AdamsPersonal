@@ -1,4 +1,4 @@
-# adam-krol.com
+# adamjkrol.com
 
 Every change you commit to `main` goes live automatically in about a minute.
 You can do everything below in GitHub's web editor. Open a folder and use **Add file → Create new file** or **Upload files**.
